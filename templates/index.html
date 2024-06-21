@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form action="/check" method="GET">
+    <table border="1">
+      <tbody>
+        {% for field in RECIEVE_FILEDS %}
+          <tr>
+            <th>{{ field.label }}</th>
+            <td><input type="text" name="{{field.name}}" value="{{ collected[field.name] }}"></td>
+            <td>{{ errors[field.name] }}</td>
+          </tr>
+        {% endfor %}
+        
+        <tr>
+          <th>送信ボタン</th>
+          <td><input type="submit" name="submit" value="送信"></td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</body>
+</html>
