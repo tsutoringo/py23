@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>顧客情報一覧画面</title>
+</head>
+<body>
+  <h1>顧客情報一覧画面</h1>
+  <p>ログインユーザー: {{ user }}</p>
+  <table border="1">
+    <tbody>
+      <tr>
+        {% for field in INPUT_CUSTOMER_FIELD.values() %}
+          <th>{{ field.label }}</th>
+        {% endfor %}
+      </tr>
+      {% for user in registerd_users %}
+        <tr>
+          {% for detail in user %}
+            <td>
+              {{ detail }}
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <table border="1">
+    <tbody>
+      <tr>
+        <td><form action="/menu" method="POST"><input type="submit" value="メニューへ戻る"></form></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

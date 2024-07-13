@@ -2,27 +2,25 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta name="viewport" content="width="device-width", initial-scale=1.0">
+  <title>インデックス</title>
 </head>
 <body>
-  <form action="/check" method="GET">
+  <h1>ログイン画面</h1>
+  <p>ログインしてください</p>
+  <form action="/menu" method="POST">
     <table border="1">
       <tbody>
-        {% for field in RECIEVE_FILEDS %}
+        {% for (key, field) in LOGIN_DATA_FIELD.items() %}
           <tr>
             <th>{{ field.label }}</th>
-            <td><input type="text" name="{{field.name}}" value="{{ collected[field.name] }}"></td>
-            <td>{{ errors[field.name] }}</td>
+            <td><input type="{{ field.type }}" name="{{ key }}"></td>
+            <td>{{ error[key] }}</td>
           </tr>
         {% endfor %}
-        
-        <tr>
-          <th>送信ボタン</th>
-          <td><input type="submit" name="submit" value="送信"></td>
-        </tr>
       </tbody>
     </table>
+    <input type="submit" name="login" value="login">
   </form>
 </body>
 </html>

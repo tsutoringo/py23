@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メニュー</title>
+</head>
+<body>
+  <h1>顧客管理メニュー</h1>
+  <p>ログインユーザー: {{ user }}</p>
+  <table border="1">
+    <tbody>
+      <tr>
+        <td>管理機能</td><td>機能説明</td>
+      </tr>
+      <tr>
+        <td>
+          <form action="/inp" method="POST"><input type="submit" value="顧客登録"></form>
+        </td>
+        <td>新規会員を登録します</td>
+      </tr>
+      <tr>
+        <td>
+          <form action="/cosinp" method="POST">
+            <input type="submit" value="顧客照会">
+          </form>
+        </td>
+        <td>会員番号から会員情報を検索します</td>
+      </tr>
+      <tr>
+        <td>
+          <form action="/cosout" method="POST">
+            <input type="submit" value="顧客一覧">
+          </form>
+        </td>
+        <td>全館員の一覧を表示します</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
