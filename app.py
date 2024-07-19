@@ -191,7 +191,7 @@ def inp():
     if user is None:
         return redirect("/")
 
-    return render_template("input.html", error = {}, user = user, INPUT_CUSTOMER_FIELD = INPUT_CUSTOMER_FIELD, lastdata = {})
+    return render_template("input.html", error = {}, user = user, INPUT_CUSTOMER_FIELD = INPUT_CUSTOMER_FIELD, lastdata = get_stored_data("new_customer"))
 
 #****************************************************
 # 顧客登録確認画面表示処理 (エンドポイント : '/inpchk')
