@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>メニュー</title>
+  <title>会員専用メニュー</title>
 </head>
 <body>
-  <h1>顧客管理メニュー</h1>
+  <h2>会員専用メニュー</h2>
   <p>ログインユーザー: {{ user }}</p>
   <table border="1">
     <tbody>
@@ -15,25 +15,25 @@
       </tr>
       <tr>
         <td>
-          <form action="/inp" method="POST"><input type="submit" value="顧客登録"></form>
+          <form action="/page1" method="GET"><input type="submit" value="ページ1"></form>
         </td>
-        <td>新規会員を登録します</td>
+        <td>会員専用ページ1へ遷移します。</td>
       </tr>
       <tr>
         <td>
-          <form action="/cosinp" method="POST">
-            <input type="submit" value="顧客照会">
+          <form action="/page2" method="GET">
+            <input type="submit" value="ページ2">
           </form>
         </td>
-        <td>会員番号から会員情報を検索します</td>
+        <td>会員専用ページ2へ遷移します。</td>
       </tr>
       <tr>
         <td>
-          <form action="/cosout" method="POST">
-            <input type="submit" value="顧客一覧">
+          <form action="/page2" method="GET">
+            <input type="submit" value="ページ3">
           </form>
         </td>
-        <td>全館員の一覧を表示します</td>
+        <td>会員専用ページ3へ遷移します。</td>
       </tr>
     </tbody>
   </table>

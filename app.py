@@ -5,8 +5,8 @@ import csv
 
 app = Flask(__name__)
 
-app.secret_key = b'PfmpsmMmfPFMmepomfpOMVpPSgreMBsdadRmgp;a:;_eggmrwpomwp'
-app.permanent_session_lifetime = timedelta(hours=1)
+app.secret_key = b'PfmpsmMmfPFMmepomfpOMVpPSgreMBsdadRmgp;a:;_eggmrwpomwa'
+app.permanent_session_lifetime = timedelta(seconds=10)
 
 #****************************************************
 # その他フィールド管理
@@ -126,14 +126,27 @@ def get_current_user():
 def set_loggined_user(username):
     session["loggined_as"] = username
 
+def need_logged_in(f):
+    def _wrapper(*args, **keywords):
+
+        user = get_current_user()
+
+        if user is None:
+            return render_template("session_error.html")
+
+        # デコレート対象の関数の実行
+        v = f(*args, **keywords)
+
+
+        return v
+    _wrapper.__name__ = f.__name__
+    return _wrapper
+
+
 
 #****************************************************
 # その他util
 #****************************************************
-
-def get_csv_filepath():
-    cwd = os.path.dirname(__file__)
-    return cwd + '/data.txt'
 
 def restore_from_field(array, fields):
     result = []
@@ -146,21 +159,21 @@ def restore_from_field(array, fields):
 #****************************************************
 # ログイン画面表示処理 (エンドポイント : '/')
 #****************************************************
-@app.route("/")
+@app.route("/", methods = [ "GET" ])
 def index():
   return render_template("index.html", error = {}, LOGIN_DATA_FIELD = LOGIN_DATA_FIELD)
 
 #****************************************************
 # 顧客管理メニュー表示処理 (エンドポイント : '/menu')
 #****************************************************
-@app.route("/menu", methods = [ "POST" ])
+@app.route("/menu", methods = [ "GET" ])
 def menu():
     # ログインしてる場合はログインスキップ
     user = get_current_user()
     if user:
         return render_template("menu.html", user = user)
 
-    field, error = get_values_by_field(LOGIN_DATA_FIELD, request.form)
+    field, error = get_values_by_field(LOGIN_DATA_FIELD, request.args)
 
     # エラーがある場合
     if len(error.keys()) > 0:
@@ -181,123 +194,26 @@ def menu():
             LOGIN_DATA_FIELD = LOGIN_DATA_FIELD
         )
 
-#****************************************************
-# 顧客登録画面表示処理 (エンドポイント : '/inp')
-#****************************************************
-@app.route("/inp", methods = [ "POST" ])
-def inp():
-    # ログインユーザー確認
-    user = get_current_user()
-    if user is None:
-        return redirect("/")
+@app.route("/page1", methods = [ "GET" ])
+@need_logged_in
+def page1():
+    return render_template("page1.html")
 
-    return render_template("input.html", error = {}, user = user, INPUT_CUSTOMER_FIELD = INPUT_CUSTOMER_FIELD, lastdata = get_stored_data("new_customer"))
+@app.route("/page2", methods = [ "GET" ])
+@need_logged_in
+def page2():
+    return render_template("page2.html")
 
-#****************************************************
-# 顧客登録確認画面表示処理 (エンドポイント : '/inpchk')
-#****************************************************
-@app.route("/inpchk", methods = [ "POST" ])
-def inpchk():
-    # ログインユーザー確認
-    user = get_current_user()
-    if user is None:
-        return redirect("/")
+@app.route("/page3", methods = [ "GET" ])
+@need_logged_in
+def page3():
+    return render_template("page3.html")
 
-    field, error = get_values_by_field(INPUT_CUSTOMER_FIELD, request.form)
+@app.route("/logout", methods = [ "GET" ])
+def logout():
+    set_loggined_user(None)
 
-    store2session("new_customer", field)
-
-    if len(error.keys()) > 0:
-       return render_template("input.html", error = error, INPUT_CUSTOMER_FIELD = INPUT_CUSTOMER_FIELD, lastdata = field, user=user)
-
-    return render_template("inpchk.html", INPUT_CUSTOMER_FIELD = INPUT_CUSTOMER_FIELD, new_customer = get_stored_data("new_customer"), user=user)
-
-#****************************************************
-# 顧客登録完了画面表示処理 (エンドポイント : '/inpres')
-#****************************************************
-@app.route("/inpres", methods = [ "POST" ])
-def inpres():
-    # ログインユーザー確認
-    user = get_current_user()
-    if user is None:
-        return redirect("/")
-
-    # 仕様書にセッションが切れる場合が記載されていないためその場合の考慮はしないものとする
-    registerd_customer,_ = get_values_by_field(INPUT_CUSTOMER_FIELD, get_stored_data_and_clear("new_customer"))
-
-    with open(get_csv_filepath(), 'a', encoding='utf8', newline='\n') as file:
-        writer = csv.writer(file)
-
-        writer.writerow(
-          registerd_customer.values()
-        )
-
-    return render_template("inpres.html", registerd_customer = registerd_customer, INPUT_CUSTOMER_FIELD = INPUT_CUSTOMER_FIELD, user = user)
-
-#****************************************************
-# 顧客検索機能 (エンドポイント : '/cosinp')
-#****************************************************
-@app.route("/cosinp", methods = [ "POST" ])
-def cosinp():
-    user = get_current_user()
-    if user is None:
-        return redirect("/")
-
-    return render_template("cosinp.html", error = {}, user = user, SEARCH_CUSTOMER_FIELD = SEARCH_CUSTOMER_FIELD)
-
-#****************************************************
-# 顧客詳細情報表示処理 (エンドポイント : '/cosres')
-#****************************************************
-@app.route("/cosres", methods = [ "POST" ])
-def cosres():
-    # ログインユーザー確認
-    user = get_current_user()
-    if user is None:
-        return redirect("/")
-
-    field, error = get_values_by_field(SEARCH_CUSTOMER_FIELD, request.form)
-
-        # エラーがある場合
-    if len(error.keys()) > 0:
-       return render_template("cosinp.html", error = error, SEARCH_CUSTOMER_FIELD = SEARCH_CUSTOMER_FIELD, user=user)
-
-    customer_no = field["customer_no"]
-    
-    registerd_users = []
-
-    with open(get_csv_filepath(), 'r', encoding='utf8', newline='\n') as file:
-        reader = csv.reader(file)
-
-        for row in reader:
-            if row[0] == customer_no:
-                registerd_users.append(row)
-
-    if len(registerd_users) == 0:
-       return render_template("cosinp.html", error = {
-           "customer_no": f"{customer_no}が存在しません"
-       }, SEARCH_CUSTOMER_FIELD = SEARCH_CUSTOMER_FIELD, user=user)
-
-    return render_template("cosres.html", registerd_users = registerd_users, INPUT_CUSTOMER_FIELD = INPUT_CUSTOMER_FIELD, user=user)
-
-#****************************************************
-# 顧客情報一覧画面 (エンドポイント : '/cosout')
-#****************************************************
-@app.route("/cosout", methods = [ "POST" ])
-def cosout():
-    # ログインユーザー確認
-    user = get_current_user()
-    if user is None:
-        return redirect("/")
-
-    registerd_users = []
-
-    with open(get_csv_filepath(), 'r', encoding='utf8', newline='\n') as file:
-        reader = csv.reader(file)
-
-        for row in reader:
-            registerd_users.append(row)
-
-    return render_template("cosout.html", registerd_users = registerd_users, user = user, INPUT_CUSTOMER_FIELD = INPUT_CUSTOMER_FIELD)
+    return redirect('/')
 
 if __name__ == "__main__":
   app.debug=True
