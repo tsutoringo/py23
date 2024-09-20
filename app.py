@@ -1,5 +1,6 @@
 from flask import render_template, Flask, request, session, redirect
 from datetime import timedelta
+import datetime
 import os
 import csv
 
@@ -161,59 +162,22 @@ def restore_from_field(array, fields):
 #****************************************************
 @app.route("/", methods = [ "GET" ])
 def index():
-  return render_template("index.html", error = {}, LOGIN_DATA_FIELD = LOGIN_DATA_FIELD)
+    return render_template('index.html')
+
 
 #****************************************************
 # 顧客管理メニュー表示処理 (エンドポイント : '/menu')
 #****************************************************
-@app.route("/menu", methods = [ "GET" ])
-def menu():
-    # ログインしてる場合はログインスキップ
-    user = get_current_user()
-    if user:
-        return render_template("menu.html", user = user)
+@app.route("/mail1", methods = [ "GET" ])
+def mail1():
+    id = request.args.get("id")
+    ps = request.args.get("ps")
 
-    field, error = get_values_by_field(LOGIN_DATA_FIELD, request.args)
+    return render_template('menu.html', id = id, ps = ps)
 
-    # エラーがある場合
-    if len(error.keys()) > 0:
-       return render_template("index.html", error = error, LOGIN_DATA_FIELD = LOGIN_DATA_FIELD)
-
-    username = field["username"]
-    password = field["password"]
-
-    if auth(username, password):
-        set_loggined_user(username)
-        return render_template("menu.html", user = get_current_user())
-    else:
-        return render_template(
-            "index.html",
-            error = {
-                "password": "ユーザーID又はパスワードが違います"
-            },
-            LOGIN_DATA_FIELD = LOGIN_DATA_FIELD
-        )
-
-@app.route("/page1", methods = [ "GET" ])
-@need_logged_in
-def page1():
-    return render_template("page1.html")
-
-@app.route("/page2", methods = [ "GET" ])
-@need_logged_in
-def page2():
-    return render_template("page2.html")
-
-@app.route("/page3", methods = [ "GET" ])
-@need_logged_in
-def page3():
-    return render_template("page3.html")
-
-@app.route("/logout", methods = [ "GET" ])
-def logout():
-    set_loggined_user(None)
-
-    return redirect('/')
+@app.route("/mail2/<id>/<ps>", methods = [ "GET" ])
+def mail2(id, ps):
+    return render_template('menu.html', id = id, ps = ps)
 
 if __name__ == "__main__":
   app.debug=True

@@ -1,41 +1,17 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>会員専用メニュー</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>登録完了</title>
 </head>
 <body>
-  <h2>会員専用メニュー</h2>
-  <p>ログインユーザー: {{ user }}</p>
-  <table border="1">
-    <tbody>
+<h2>会員登録完了</h2> 以下の内容で登録が完了しました。<BR> <table border="1">
       <tr>
-        <td>管理機能</td><td>機能説明</td>
+        <td>ID</td><td>{{id}}</td>
+</tr> <tr>
+        <td>pass</td><td>{{ps}}</td>
       </tr>
-      <tr>
-        <td>
-          <form action="/page1" method="GET"><input type="submit" value="ページ1"></form>
-        </td>
-        <td>会員専用ページ1へ遷移します。</td>
-      </tr>
-      <tr>
-        <td>
-          <form action="/page2" method="GET">
-            <input type="submit" value="ページ2">
-          </form>
-        </td>
-        <td>会員専用ページ2へ遷移します。</td>
-      </tr>
-      <tr>
-        <td>
-          <form action="/page2" method="GET">
-            <input type="submit" value="ページ3">
-          </form>
-        </td>
-        <td>会員専用ページ3へ遷移します。</td>
-      </tr>
-    </tbody>
   </table>
 </body>
 </html>

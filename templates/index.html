@@ -1,26 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width="device-width", initial-scale=1.0">
-  <title>インデックス</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>二段階認証メール</title>
 </head>
 <body>
-  <h1>ログイン画面</h1>
-  <p>ログインしてください</p>
-  <form action="/menu" method="GET">
-    <table border="1">
-      <tbody>
-        {% for (key, field) in LOGIN_DATA_FIELD.items() %}
-          <tr>
-            <th>{{ field.label }}</th>
-            <td><input type="{{ field.type }}" name="{{ key }}"></td>
-            <td>{{ error[key] }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <input type="submit" name="login" value="login">
-  </form>
+<h1>会員登録 二段階認証メール</h1> 【パターン1】クエリパラメータ送信<br>
+<a href="http://127.0.0.1:5000/mail1?id=Kawa&pass=1234">登録を完了する</a> <br>
+<br> 【パターン2】パスパラメータ送信<br>
+<a href="http://127.0.0.1:5000/mail2/Kawa/1234">登録を完了する</a><br> <br>
 </body>
 </html>
