@@ -1,0 +1,14 @@
+
+FROM mysql:9.1.0
+
+# 日本語環境を追加
+RUN microdnf update -y
+RUN microdnf install -y glibc-locale-source
+RUN localedef -i ja_JP -c -f UTF-8 -A /usr/share/locale/locale.alias ja_JP.UTF-8
+
+ENV LC_ALL ja_JP.UTF-8
+
+ENV TZ Asia/Tokyo
+ENV LANG=ja_JP.UTF-8
+
+EXPOSE 3306

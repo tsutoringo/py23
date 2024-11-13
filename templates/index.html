@@ -1,27 +1,33 @@
 <!DOCTYPE html>
-  <html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-  </head>
-  <body>
-      <form action="/setcookie" method="post">
-        <table>
-          <tr>
-            <td>名前</td>
-            <td>
-              <input type="text" name="username">
-            </td>
-          </tr>
-          <tr>
-            <td>アドレス</td>
-            <td>
-              <input type="text" name="address">
-            </td>
-          </tr>
-        </table>
-        <input type="submit" value="送信">
-      </form>
-  </body>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <table border="1">
+    <thead>
+      <tr>
+        {% for (_, f) in fild.items() %}
+          <td>{{ f }}</td>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for rec in recs %}
+        <tr>
+          {% for (key, columndata) in rec.items() %}
+            {% if key != "fname" %}
+              <td>{{ columndata }}</td>
+            {% endif %}
+          {% endfor %}
+          <td>
+            <a href="./detail?gno={{ rec['gno'] }}">詳細</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
 </html>
