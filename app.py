@@ -22,67 +22,60 @@ fild = {
 
 def render_error(message: str, error: Exception):
   print(f"********************* システム運用エラー *********************")
-  print(type(error))
   print(error)
 
-  temp = render_template("error.html", message = message, code = type(error))
-  res = make_response(temp, 500)
+  temp = render_template("error.html", message = message, code = error.code)
+  res = make_response(temp, error.code)
 
   return res
+
+def query(query):
+  recs = None
+  
+  con = con_db()
+  cur = con.cursor(dictionary=True) 
+  cur.execute(query)
+  recs = cur.fetchall()
+  cur.close()
+  con.close()
+
+  return recs
+
 
 # DB接続関数
 def con_db():
   con = mysql.connector.connect(
     host = "pythondatabase" if os.path.exists("/.dockerenv") else "localhost",
     user = "root",
-    passwd = "root",
+    passwd = "roota",
     db = "py24db",
   )
   return con
+
+# エラーハンドラー
+@app.errorhandler(404)
+def notfound_handler(error):
+  return render_error("リクエストされたページは見つかりません。", error)
+
+@app.errorhandler(500)
+def server_internal_error_handler(error):
+  return render_error("内部サーバーエラーが発生しました。", error)
+
 
 #****************************************************
 #（'/'）
 #****************************************************
 @app.route('/')
 def index():
+  recs = query("SELECT * FROM gakuseki;")
 
-  recs = None
-  
-  try:
-    sql = "SELECT * FROM gakuseki;"
-    con = con_db()
-    cur = con.cursor(dictionary=True) 
-    cur.execute(sql)
-    recs = cur.fetchall()
-    cur.close()
-    con.close()
-  except mysql.connector.errors.DatabaseError as error:
-    return render_error("データーベーサーバーの起動が確認できません。", error)
-  except mysql.connector.errors.ProgrammingError as error:
-    return render_error("データベースプログラミングエラー", error)
-  except Exception as error:
-    return render_error("予期せぬエラーが発生しました。", error)
   return render_template("index.html", recs=recs, fild=fild)
 
 @app.route('/detail')
 def detail():
   gno = request.args["gno"]
-  rec = None
-  
-  try:
-    sql = f"SELECT * FROM gakuseki where gno = {gno};"
-    con = con_db()
-    cur = con.cursor(dictionary=True) 
-    cur.execute(sql)
-    rec = cur.fetchall()[0]
-    cur.close()
-    con.close()
-  except mysql.connector.errors.DatabaseError as error:
-    return render_error("データーベーサーバーの起動が確認できません。", error)
-  except mysql.connector.errors.ProgrammingError as error:
-    return render_error("データベースプログラミングエラー", error)
-  except Exception as error:
-    return render_error("予期せぬエラーが発生しました。", error)
+
+  rec = query(f"SELECT * FROM gakuseki where gno = {gno};")[0]
 
   return render_template("detail.html", rec=rec, fild=fild)
 
@@ -90,5 +83,5 @@ def detail():
 # アプリケーション実⾏
 #****************************************************
 if __name__ == "__main__":
-  app.debug=True #開発時デバックMODE
+  app.debug=False #開発時デバックMODE
   app.run(host="0.0.0.0", port=5000)
