@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}商品登録画面{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block main %} 
+<h1>商品登録</h1>
+<form action="/upload/complete" enctype="multipart/form-data" method="post">
+  <table>
+    <tbody>
+      {% for (name, label) in fild.items(): %}
+        <tr>
+          <td>
+            {{ label }}
+          </td>
+
+          <td>
+            <input type="text" name="{{name}}">
+          </td>
+          <td>
+            {{ errors[name] }}
+          </td>
+        </tr>
+      {% endfor %}
+      <tr>
+        <td>商品画像</td>
+        <td><input type="file" name="file"></td>
+        <td>{{ errors["file"] }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <button>送信</button>
+</form>
+{% endblock %}

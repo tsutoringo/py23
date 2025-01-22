@@ -1,30 +1,33 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>詳細情報</title>
-</head>
-<body>
-  <table border="1">
-    <thead>
-      <th>学籍番号</th><th>氏名</th><th>住所</th><th>電話番号</th><th>詳細情報</th>
-    </thead>
-    <tbody>
-      <td>{{rec["gno"]}}</td><td>{{rec["gname"]}}</td><td>{{rec["addr"]}}</td><td>{{rec["tel"]}}</td><td>{{rec["detail"]}}</td>
-    </tbody>
-  </table>
 
-  <table border="1">
-    <thead>
-      <th>写真</th>
-    </thead>
-    <tbody>
-      <td>
-        <img src="{{rec['fname']}}" alt="">
-      </td>
-    </tbody>
-  </table>
-  <a href="/">トップ</a>
-</body>
-</html>
+
+{% extends 'base.html' %}
+{% block title %}詳細情報{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block main %}
+<table>
+  <tbody>
+    {% for (key, label) in fild.items(): %}
+      <tr>
+        <td>
+          {{ label }}
+        </td>
+        <td>
+          {{ values[key] }}
+        </td>
+      </tr>
+    {% endfor %}
+    <tr>
+      <td>商品画像(小)</td>
+      <td><img src="/static/image/{{filename}}" alt=""></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>商品画像(大)</td>
+      <td><img src="/static/image/thumb/{{filename}}" alt=""></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

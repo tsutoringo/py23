@@ -1,33 +1,26 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <table border="1">
-    <thead>
-      <tr>
-        {% for (_, f) in fild.items() %}
-          <td>{{ f }}</td>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for rec in recs %}
-        <tr>
-          {% for (key, columndata) in rec.items() %}
-            {% if key != "fname" %}
-              <td>{{ columndata }}</td>
-            {% endif %}
-          {% endfor %}
-          <td>
-            <a href="./detail?gno={{ rec['gno'] }}">詳細</a>
-          </td>
-        </tr>
+
+
+{% extends 'base.html' %}
+{% block title %}詳細情報{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block main %}
+  <table>
+    <tr>
+      {% for (_, value) in VIEW_FILES.items(): %}
+        <td>{{ value }}</td>
       {% endfor %}
-    </tbody>
+    </tr>
+    {% for record in records: %}
+    <tr>
+      {% for (key, value) in VIEW_FILES.items(): %}
+        <td>{{ record[key] }} </td>
+      {% endfor %}
+      <td>
+        <img src="/static/image/{{record.filename}}" alt="">
+      </td>
+    </tr>
+    {% endfor %}
   </table>
-</body>
-</html>
+{% endblock %}
