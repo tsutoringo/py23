@@ -1,0 +1,47 @@
+
+
+{% extends 'base.html' %}
+{% block title %}評定結果変更{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block body %}
+<form action="/modinp/send" method="post">
+  <input type="hidden" name="gno" value="{{ hyotei["gno"] }}">
+  <table border="1">
+    <tr>
+      <th>学籍番号</th>
+      <td>{{ hyotei["gno"] }}</td>
+    </tr>
+    <tr>
+      <th>クラス記号</th>
+      <td>{{ hyotei["cls"] }}</td>
+    </tr>
+    <tr>
+      <th>出席番号</th>
+      <td>{{ hyotei["sno"] }}</td>
+    </tr>
+    <tr>
+      <th>学生名</th>
+      <td>{{ hyotei["gname"] }}</td>
+    </tr>
+    <tr>
+      <th>IH22</th>
+      <td><input type="text" name="ih22" value="{{ hyotei["ih22"] }}">{{ errors["ih22"] }}</td>
+    </tr>
+    <tr>
+      <th>py24</th>
+      <td><input type="text" name="py24" value="{{ hyotei["py24"] }}">{{ errors["py24"] }}</td>
+    </tr>
+    <tr>
+      <th>io21</th>
+      <td><input type="text" name="io21" value="{{ hyotei["io21"] }}">{{ errors["io21"] }}</td>
+    </tr>
+    <tr>
+      <th>認定状況</th>
+      <td>{{ hyotei["result"] }}</td>
+    </tr>
+  </table>
+  <button>更新</button>
+</form>
+{% endblock %}

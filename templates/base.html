@@ -11,27 +11,25 @@
 </head>
 
 <body>
-  <h3>IH-12A-405-01 T.kawashima</h3>
-  <hr>
-  {% block main %}
+  <h3>評定結果管理システム</h3>
+  {% block loggedInUser %}
+  LogIn: {{ loggedInUser["usname"] }}
   {% endblock %}
-  <br>
   <hr>
-  <table border="0">
-    <tr>
-      <td>
-        </form>
-      </td>
-      <td>
-        <form action="/" method="GET">
-          <input type="submit" VALUE="商品一覧">
-        </form>
-        <form action="/upload" method="GET">
-          <input type="submit" VALUE="商品登録">
-        </form>
-      </td>
-    </tr>
-  </table>
+  {% block body %}
+  {% endblock %}
+  <hr>
+  {% block footer %}
+    <div class="button" style="display: flex;">
+      <form action="/"><button>評定結果一覧</button></form>
+      <form action="/cart/disp"><button>選択学生一覧</button></form>
+      <form action="/input"><button>評定結果登録</button></form>
+      <form action="/logout" method="post"><button>ログアウト</button></form>
+      <form action="/download/all"><button>評定データをバックアップ</button></form>
+      <form action="/"><button>評定結果一覧</button></form>
+      <form action="/"><button>評定結果一覧</button></form>
+    </div>
+  {% endblock %}
 </body>
 
 </html>

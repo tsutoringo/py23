@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}評定結果登録{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block body %}
+<form action="/upload" method="post">
+  <table border="1">
+    {% for (key, value) in NEW_HYOTEI.items(): %}
+      <tr>
+        <td>{{ value }}</td><td><input type="text" name="{{ key }}" value="{{ values[key] }}"></td><td>{{ errors[key] }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+  <button>登録</button>
+</form>
+{% endblock %}

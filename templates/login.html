@@ -1,0 +1,27 @@
+
+
+{% extends 'base.html' %}
+{% block title %}ログイン画面{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block loggedInUser %}
+{% endblock %}
+{% block body %}
+<h2>システムログイン</h2>
+<form action="/login/send" method="post">
+  <table>
+    <tbody>
+      {% for (key, value) in LOGIN_FIELD.items(): %}
+        <tr>
+          <td>{{ value }}</td><td><input type="text" name="{{ key }}" value="{{ values[key] }}"></td><td>{{ errors[key] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ error }}
+  <button>ログイン</button>
+</form>
+{% endblock %}
+{% block footer %}
+{% endblock %}
